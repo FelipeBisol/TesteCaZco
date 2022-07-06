@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('event_time');
             $table->string('email_to_notification');
             $table->boolean('sent');
-            $table->timestamp('sent_time');
+            $table->timestamp('sent_time')->useCurrent();
             $table->timestamps();
         });
     }
