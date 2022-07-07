@@ -9,7 +9,7 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['name', 'description', 'event_time', 'email_to_notification'];
     
     protected static function newFactory()
     {

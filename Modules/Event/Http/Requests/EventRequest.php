@@ -12,7 +12,7 @@ class EventRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'event_time' => ['required', 'date_format:'],
+            'event_time' => ['required', 'date_format:d/m/Y H:i'],
             'email_to_notification' => ['required', 'email']
         ];
     }
