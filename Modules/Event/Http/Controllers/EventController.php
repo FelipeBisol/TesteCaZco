@@ -2,10 +2,12 @@
 
 namespace Modules\Event\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Event\Entities\Event;
+use Modules\Event\Http\Requests\EventIndexRequest;
 use Modules\Event\Http\Requests\EventRequest;
+use Modules\Event\Http\Requests\EventUpdateRequest;
 use Modules\Event\Repositories\EventRepository;
 
 class EventController extends Controller
@@ -14,12 +16,15 @@ class EventController extends Controller
 
     public function __construct()
     {
-        $this->repository = new EventRepository();
+        $this->repository = new EventRepository(new Event());
     }
 
-    public function index()
+    public function index(EventIndexRequest $request)
     {
-        return view('event::index');
+        //caso o input de filter esteja errado, deverá retornar erro 500
+        $filter = $request->only('day');
+
+        $this->repository->index($filter);
     }
 
     public function store(EventRequest $request)
@@ -32,25 +37,24 @@ class EventController extends Controller
         return response()->json(['message' => "Ocorreu um erro interno, caso continue entre em contato com administrador."], 500);
     }
 
-    public function show($id)
+    public function update(EventUpdateRequest $request, $id)
     {
-        return view('event::show');
-    }
+        $update = $this->repository->update($id, $request->all());
 
-    public function edit($id)
-    {
-        return view('event::edit');
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        //
+        if($update){
+            return response()->json(['message' => "O evento foi editado com sucesso."], 200);
+        }
+        return response()->json(['message' => "Ocorreu um erro interno, caso continue entre em contato com administrador."], 500);
     }
 
 
     public function destroy($id)
     {
-        //
+        $delete = $this->repository->delete($id);
+
+        if($delete){
+            return response()->json(['message' => "O evento foi editado com sucesso."], 200);
+        }
+        return response()->json(['message' => "Ocorreu um erro interno, caso continue entre em contato com administrador."], 500);
     }
 }

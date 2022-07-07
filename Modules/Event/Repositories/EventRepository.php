@@ -2,41 +2,55 @@
 
 namespace Modules\Event\Repositories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Event\Entities\Event;
 
 class EventRepository implements IRepository
 {
-    private Builder $builder;
+    private Builder $event;
 
-    public function __construct()
+    public function __construct(Event $model)
     {
-        $event = new Event();
-        $this->builder = $event::query();
+        $this->event = $model::query();
     }
 
     public function create($data): bool
     {
         try {
-            Event::query()->create($data);
+            $this->event->create($data);
             return true;
         }catch (\Exception $exception){
             return false;
         }
     }
 
-    public function delete()
+    public function delete($id): bool
     {
-        // TODO: Implement delete() method.
+        try {
+            $this->event->find($id)->delete();
+            return true;
+        }catch (\Exception $exception){
+            return false;
+        }
     }
 
-    public function update()
+    public function update($id, $data): bool
     {
-        // TODO: Implement update() method.
+        try {
+            $this->event->find($id)->update($id, $data);
+            return true;
+        }catch (\Exception $exception){
+            return false;
+        }
     }
 
-    public function filter()
+    public function index($filter = null)
     {
-        // TODO: Implement filter() method.
+        if(empty($filter)){
+            $filter = Carbon::now()->format('d-m-Y');
+        }
+
+        return $this->event->where('event_time', 'LIKE', "%{$filter}%")->get();
     }
 }
