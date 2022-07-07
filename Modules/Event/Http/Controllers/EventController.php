@@ -2,6 +2,7 @@
 
 namespace Modules\Event\Http\Controllers;
 
+use App\Exceptions\InternalErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Event\Entities\Event;
@@ -14,9 +15,9 @@ class EventController extends Controller
 {
     private EventRepository $repository;
 
-    public function __construct()
+    public function __construct(EventRepository $repository)
     {
-        $this->repository = new EventRepository(new Event());
+        $this->repository = $repository;
     }
 
     public function index(EventIndexRequest $request)
@@ -34,7 +35,7 @@ class EventController extends Controller
         if($create){
             return response()->json(['message' => "O evento foi criado com sucesso."], 200);
         }
-        return response()->json(['message' => "Ocorreu um erro interno, caso continue entre em contato com administrador."], 500);
+        throw new InternalErrorException();
     }
 
     public function update(EventUpdateRequest $request, $id)
@@ -44,7 +45,7 @@ class EventController extends Controller
         if($update){
             return response()->json(['message' => "O evento foi editado com sucesso."], 200);
         }
-        return response()->json(['message' => "Ocorreu um erro interno, caso continue entre em contato com administrador."], 500);
+        throw new InternalErrorException();
     }
 
 
@@ -55,6 +56,6 @@ class EventController extends Controller
         if($delete){
             return response()->json(['message' => "O evento foi editado com sucesso."], 200);
         }
-        return response()->json(['message' => "Ocorreu um erro interno, caso continue entre em contato com administrador."], 500);
+        throw new InternalErrorException();
     }
 }
