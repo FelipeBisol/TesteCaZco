@@ -18,6 +18,7 @@ class EventRepository implements IRepository
     public function create($data): bool
     {
         try {
+            $data['event_time'] = \DateTime::createFromFormat('d/m/Y G:i', $data['event_time'])->format('Y/m/d G:i:s');
             $this->event->create($data);
             return true;
         }catch (\Exception $exception){
@@ -38,6 +39,9 @@ class EventRepository implements IRepository
     public function update($id, $data): bool
     {
         try {
+            if(isset($data['event_time'])){
+                $data['event_time'] = \DateTime::createFromFormat('d/m/Y G:i', $data['event_time'])->format('Y/m/d G:i:s');
+            }
             $this->event->find($id)->update($data);
             return true;
         }catch (\Exception $exception){

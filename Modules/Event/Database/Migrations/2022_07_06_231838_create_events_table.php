@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->string('event_time');
+            $table->timestamp('event_time');
             $table->string('email_to_notification');
             $table->boolean('sent')->default(false);
             $table->timestamp('sent_time')->nullable();

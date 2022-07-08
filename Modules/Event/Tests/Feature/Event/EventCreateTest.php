@@ -27,7 +27,11 @@ class EventCreateTest extends TestCase
         $response = $this->post('/api/event', $payload);
 
         //assert
-        $this->assertDatabaseHas('events', $payload);
+        $this->assertDatabaseHas('events', [
+            'name' => $payload['name'],
+            'description' => $payload['description'],
+            'email_to_notification' => $payload['email_to_notification']
+        ]);
         $response->assertStatus(200);
     }
 
