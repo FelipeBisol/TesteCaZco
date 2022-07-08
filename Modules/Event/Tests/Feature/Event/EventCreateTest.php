@@ -35,7 +35,6 @@ class EventCreateTest extends TestCase
     {
         //arrange
         $payload = [
-//            "name" => "Dentista",
             "description"=> "Levar raio-x",
             "event_time"=> "28/02/2020 16:40",
             "email_to_notification"=> "test@cazco.digital"

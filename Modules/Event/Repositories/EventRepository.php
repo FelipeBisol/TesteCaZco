@@ -12,7 +12,7 @@ class EventRepository implements IRepository
 
     public function __construct(Event $model)
     {
-        $this->event = $model::query();
+        $this->event = $model->newQuery();
     }
 
     public function create($data): bool
@@ -38,7 +38,7 @@ class EventRepository implements IRepository
     public function update($id, $data): bool
     {
         try {
-            $this->event->find($id)->update($id, $data);
+            $this->event->find($id)->update($data);
             return true;
         }catch (\Exception $exception){
             return false;
@@ -47,10 +47,20 @@ class EventRepository implements IRepository
 
     public function index($filter = null)
     {
-        if(empty($filter)){
-            $filter = Carbon::now()->format('d-m-Y');
-        }
+        try {
+            if(empty($filter)){
+                $filter = Carbon::now()->format('d/m/Y');
+            }else{
+                $filter = str_replace('-', '/', $filter);
+                $filter = $filter['day'];
+            }
 
-        return $this->event->where('event_time', 'LIKE', "%{$filter}%")->get();
+
+            return $this->event->select('id', 'name', 'description', 'event_time', 'email_to_notification')
+                ->where('event_time', 'LIKE', "%{$filter}%")->get();
+
+        }catch (\Exception $exception){
+            return false;
+        }
     }
 }

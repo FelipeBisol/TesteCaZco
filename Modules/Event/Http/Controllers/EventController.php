@@ -25,7 +25,12 @@ class EventController extends Controller
         //caso o input de filter esteja errado, deverá retornar erro 500
         $filter = $request->only('day');
 
-        $this->repository->index($filter);
+        $events = $this->repository->index($filter);
+
+        if($events !== false){
+            return response()->json($events->toArray(), 200);
+        }
+        throw new InternalErrorException();
     }
 
     public function store(EventRequest $request)
@@ -54,7 +59,7 @@ class EventController extends Controller
         $delete = $this->repository->delete($id);
 
         if($delete){
-            return response()->json(['message' => "O evento foi editado com sucesso."], 200);
+            return response()->json(['message' => "O evento foi removido com sucesso."], 200);
         }
         throw new InternalErrorException();
     }

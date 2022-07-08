@@ -14,7 +14,7 @@ class EventIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'day' => ['nullable', 'date_format:d/m/Y'],
+            'day' => ['nullable', 'date_format:d-m-Y'],
         ];
     }
 
