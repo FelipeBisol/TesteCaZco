@@ -53,12 +53,10 @@ class EventRepository implements IRepository
     {
         try {
             if(empty($filter)){
-                $filter = Carbon::now()->format('d/m/Y');
+                $filter = Carbon::now();
             }else{
-                $filter = str_replace('-', '/', $filter);
-                $filter = $filter['day'];
+                $filter = \DateTime::createFromFormat('d-m-Y', $filter['day'])->format('Y-m-d');
             }
-
 
             return $this->event->select('id', 'name', 'description', 'event_time', 'email_to_notification')
                 ->where('event_time', 'LIKE', "%{$filter}%")->get();

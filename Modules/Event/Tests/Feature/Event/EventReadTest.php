@@ -2,6 +2,7 @@
 
 namespace Modules\Event\Tests\Feature\Event;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Event\Database\factories\EventFactory;
 use Modules\Event\Entities\Event;
@@ -18,7 +19,7 @@ class EventReadTest extends TestCase
     public function test_if_this_successfully_return_an_event_with_today_date()
     {
         //arrange
-        $now = now()->format('d/m/Y G:i');
+        $now = now();
         $firstEvent = EventFactory::new()->create(['event_time' => $now]);
         $secondEvent = EventFactory::new()->create();
 
@@ -40,7 +41,7 @@ class EventReadTest extends TestCase
     public function test_if_this_successfully_return_an_event_with_filter_date()
     {
         //arrange
-        $firstEvent = EventFactory::new()->create(['event_time' => '27/11/2001 13:10']);
+        $firstEvent = EventFactory::new()->create(['event_time' => Carbon::make('2001/11/27')]);
         $secondEvent = EventFactory::new()->create();
 
         //act
@@ -64,7 +65,7 @@ class EventReadTest extends TestCase
         $repository = new EventRepository($model->setTable('aba'));
         $controller = (new EventController($repository));
 
-        $firstEvent = EventFactory::new()->create(['event_time' => '27/11/2001 13:10']);
+        $firstEvent = EventFactory::new()->create(['event_time' => Carbon::make('2001/11/27')]);
         $secondEvent = EventFactory::new()->create();
 
         $request = new EventIndexRequest();

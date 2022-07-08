@@ -23,7 +23,7 @@ class EventFactory extends Factory
         return [
             "name" => "Dentista",
             "description"=> "Levar raio-x",
-            "event_time"=> "28/02/2020 16:40",
+            "event_time" =>  \DateTime::createFromFormat('d/m/Y G:i', "28/02/2020 16:40")->format('Y/m/d G:i:s'),
             "email_to_notification"=> "test@cazco.digital"
         ];
     }

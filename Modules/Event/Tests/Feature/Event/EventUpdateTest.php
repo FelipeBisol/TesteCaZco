@@ -18,14 +18,7 @@ class EventUpdateTest extends TestCase
     public function test_if_this_successfully_creates_an_event()
     {
         //arrange
-        $payload = [
-            "name" => "Dentista",
-            "description"=> "Levar raio-x",
-            "event_time"=> "28/02/2020 16:40",
-            "email_to_notification"=> "test@cazco.digital"
-        ];
-
-        $event = Event::query()->create($payload);
+        $event = EventFactory::new()->create();
         $payloadUpdated = 'test update';
 
         //act
@@ -35,9 +28,8 @@ class EventUpdateTest extends TestCase
         $response->assertStatus(200);
         $this->assertDatabaseHas('events', [
             'name' => $payloadUpdated,
-            'description' => $payload['description'],
-            'event_time' => $payload['event_time'],
-            'email_to_notification' => $payload['email_to_notification']
+            'description' => $event->description,
+            'email_to_notification' => $event->email_to_notification
         ]);
     }
 
